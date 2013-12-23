@@ -1,0 +1,17 @@
+<%= form_for @order do |f| %>
+
+  <%= f.fields_for :item do |item| %>
+    <%= item.label :name, "Order" %>
+    <%= item.text_field :name %>
+
+    <%= item.label :price, "Price" %>
+    <%= item.text_field :price %>
+  <% end %>
+
+  <%= f.fields_for :customer do |customer| %>
+    <%= customer.label :name %>
+    <%= customer.text_field :name %>
+  <% end %>
+
+  <%= f.submit "Place" %>
+<% end %>
