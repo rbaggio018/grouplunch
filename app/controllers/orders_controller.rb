@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
 
   def index
-    @orders = Order.all.includes(:item, :customer)
+    @orders = Order.where(group_order_id: nil).includes(:item, :customer)
     @group_order = GroupOrder.new(orders: @orders)
   end
 

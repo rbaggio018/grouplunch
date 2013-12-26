@@ -6,3 +6,4 @@ Feature: Customer Places Group Order
     When  Bo Liang places a group order with total $18.68
     Then  Julius Caesar should have $-9.1 as balance
     And   Bo Liang should have $9.1 as balance
+    And   Caesar Salad with price $8.5 under Julius Caesar should not be in the order list

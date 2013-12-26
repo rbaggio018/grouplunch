@@ -114,8 +114,18 @@ describe OrdersController do
       expect(assigns(:orders)).to eq([order])
     end
 
+    context 'group order has placed' do
+      let!(:new_order) { FactoryGirl.create(:order) }
+      before { FactoryGirl.create(:group_order, orders: [order]) }
+
+      it 'assigns @orders with non gorup placed orders' do
+        get :index
+        expect(assigns(:orders)).to eq([new_order])
+      end
+    end
+
     it 'eager loads item and customer' do
-      Order.stub(:all).and_return(Order)
+      Order.stub(:where).and_return(Order)
       expect(Order).to receive(:includes).with(:item, :customer).and_return([])
       get :index
     end

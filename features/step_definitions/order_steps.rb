@@ -12,3 +12,10 @@ Then(/^(.*) with price \$(.*) under (.*) should be in the order list$/) do |orde
   page.should have_content price
   page.should have_content user
 end
+
+Then(/^(.*) with price \$(.*) under (.*) should not be in the order list$/) do |order, price, user|
+  visit orders_url
+  page.should_not have_content order
+  page.should_not have_content price
+  page.should_not have_content user
+end
