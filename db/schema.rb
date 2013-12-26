@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131222224047) do
+ActiveRecord::Schema.define(version: 20131225230225) do
+
+  create_table "group_orders", force: true do |t|
+    t.integer  "customer_id"
+    t.decimal  "total",       precision: 8, scale: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "items", force: true do |t|
     t.string   "name"
@@ -25,12 +32,14 @@ ActiveRecord::Schema.define(version: 20131222224047) do
     t.integer  "customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "group_order_id"
   end
 
   create_table "users", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "balance",    precision: 8, scale: 2, default: 0.0
   end
 
 end

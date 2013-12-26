@@ -6,3 +6,20 @@
   </tr>
   <%= render @orders %>
 </table>
+
+<%= form_for @group_order do |f| %>
+
+  <%= f.fields_for :customer do |customer| %>
+    <%= customer.label :name %>
+    <%= customer.text_field :name %>
+  <% end %>
+
+  <%= f.label :total %>
+  <%= f.text_field :total %>
+
+  <% @group_order.orders.each do |order| %>
+    <%= f.hidden_field :order_ids, value: order.id, multiple: true %>
+  <% end %>
+
+  <%= f.submit "Place" %>
+<% end %>

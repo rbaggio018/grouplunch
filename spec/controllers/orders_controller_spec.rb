@@ -4,7 +4,7 @@ describe OrdersController do
 
   describe 'GET#new' do
 
-    it 'asigns @order' do
+    it 'assigns @order' do
       order = Order.new
       Order.stub(:new).and_return(order)
       get :new
@@ -34,12 +34,22 @@ describe OrdersController do
   end
 
   describe 'GET#index' do
+    let!(:order) { FactoryGirl.create(:order) }
 
-    it 'asigns @orders with all orders' do
-      order = FactoryGirl.create(:order)
+    it 'assigns @orders with all orders' do
       get :index
-
       expect(assigns(:orders)).to eq([order])
+    end
+
+    it 'eager loads item and customer' do
+      Order.stub(:all).and_return(Order)
+      expect(Order).to receive(:includes).with(:item, :customer).and_return([])
+      get :index
+    end
+
+    it 'assigns @group_order' do
+      get :index
+      expect(assigns(:group_order).orders).to eq([order])
     end
   end
 end

@@ -1,8 +1,8 @@
 FactoryGirl.define do
 
   factory :order do
-    item { FactoryGirl.build :item }
-    customer { FactoryGirl.build :user }
+    item { FactoryGirl.create :item }
+    customer { FactoryGirl.create :user }
   end
 
   factory :item do
@@ -12,5 +12,11 @@ FactoryGirl.define do
 
   factory :user do
     sequence(:name) { |n| "User #{n}" }
+  end
+
+  factory :group_order do
+    total "20.0"
+    orders { 3.times.map { FactoryGirl.create :order } }
+    customer { FactoryGirl.create :user }
   end
 end
