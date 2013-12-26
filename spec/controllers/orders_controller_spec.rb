@@ -16,7 +16,7 @@ describe OrdersController do
   describe 'POST#create' do
     let(:order_params) {
       {
-        item: { name: "Item", price: 6.95 },
+        item: { name: "Item", price: 6.95, specs: "Specs" },
         customer: { name: "Customer" }
       }
     }
@@ -76,7 +76,7 @@ describe OrdersController do
     end
 
     context 'existing item' do
-      let!(:existing_item) { FactoryGirl.create(:item, name: "Item", price: 6.95) }
+      let!(:existing_item) { FactoryGirl.create(:item, name: "Item", price: 6.95, specs: "Specs") }
 
       it 'does not create item' do
         expect{
@@ -90,8 +90,23 @@ describe OrdersController do
       end
     end
 
-    context 'new item with same name but different price' do
-      let!(:item) { FactoryGirl.create(:item, name: "Item", price: 7.25) }
+    context 'new item with same name and same specs but different price' do
+      let!(:item) { FactoryGirl.create(:item, name: "Item", price: 7.25, specs: "Specs") }
+
+      it 'creates a new item' do
+        expect{
+          post :create, order: order_params
+        }.to change(Item, :count).by(1)
+      end
+
+      it 'associates order with new item' do
+        post :create, order: order_params
+        expect(Order.last.item).to eq(Item.last)
+      end
+    end
+
+    context 'new item with same name and same price but different specs' do
+      let!(:item) { FactoryGirl.create(:item, name: "Item", price: 6.95, specs: "Different Specs") }
 
       it 'creates a new item' do
         expect{

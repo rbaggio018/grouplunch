@@ -4,17 +4,21 @@ Feature: User Makes Order
   I want to make order on the home page
 
   Scenario: Visitor Makes Order
-    When Julius Caesar makes an order Caesar Salad with price $8.50
-    Then Caesar Salad with price $8.5 under Julius Caesar should be in the order list
+    When Julius Caesar makes an order Caesar Salad which has price $8.50
+    Then Caesar Salad which has price $8.5 under Julius Caesar should be in the order list
 
   Scenario: Return User Makes Order
     Given We have a user named Julius Caesar
-    When  Julius Caesar makes an order Caesar Salad with price $8.5
+    When  Julius Caesar makes an order Caesar Salad which has price $8.5
     Then  We should have only one user named Julius Caesar
-    And   Caesar Salad with price $8.5 under Julius Caesar should be in the order list
+    And   Caesar Salad which has price $8.5 under Julius Caesar should be in the order list
 
   Scenario: Visitor Orders Existing Item
-    Given We have an item named Caesar Salad with price $8.5
-    When  Julius Caesar makes an order Caesar Salad with price $8.5
-    Then  We should have only one item named Caesar Salad with price $8.5
-    And   Caesar Salad with price $8.5 under Julius Caesar should be in the order list
+    Given We have an item named Caesar Salad with Balsamic Vinaigrette which has price $8.5
+    When  Julius Caesar makes an order Caesar Salad with Balsamic Vinaigrette which has price $8.5
+    Then  We should have only one item named Caesar Salad with Balsamic Vinaigrette which has price $8.5
+    And   Caesar Salad with Balsamic Vinaigrette which has price $8.5 under Julius Caesar should be in the order list
+
+  Scenario: Visitor Makes Order With Specs
+    When Julius Caesar makes an order Caesar Salad with Balsamic Vinaigrette which has price $8.50
+    Then Caesar Salad with Balsamic Vinaigrette which has price $8.5 under Julius Caesar should be in the order list
