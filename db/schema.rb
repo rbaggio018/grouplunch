@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131225230225) do
+ActiveRecord::Schema.define(version: 20131226162429) do
 
   create_table "group_orders", force: true do |t|
     t.integer  "customer_id"
@@ -33,6 +33,14 @@ ActiveRecord::Schema.define(version: 20131225230225) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "group_order_id"
+  end
+
+  create_table "transactions", force: true do |t|
+    t.integer  "source_id"
+    t.integer  "destination_id"
+    t.decimal  "amount",         precision: 8, scale: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "users", force: true do |t|

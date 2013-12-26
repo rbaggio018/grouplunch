@@ -14,7 +14,7 @@ describe GroupOrdersController do
     }
 
     context 'customer exists' do
-      before { FactoryGirl.create(:user, name: "Customer") }
+      let!(:customer) { FactoryGirl.create(:user, name: "Customer") }
 
       it 'redirects to users list' do
         post :create, group_order: group_order_params
@@ -32,13 +32,24 @@ describe GroupOrdersController do
         expect(GroupOrder.last.orders).to match_array([order1, order2])
       end
 
+      it 'associates group_order and customer' do
+        post :create, group_order: group_order_params
+        expect(GroupOrder.last.customer).to eq(customer)
+      end
+
       it 'updates balances' do
         expect(BalanceCalculator).to receive(:calculate).once
         post :create, group_order: group_order_params
       end
     end
 
-    context 'customer doesnot exist' do
+    context 'customer does not exist' do
+
+      it 'does not create group order' do
+        expect {
+          post :create, group_order: group_order_params
+        }.to change(GroupOrder, :count).by(0)
+      end
 
       it 'redirects to orders_path' do
         post :create, group_order: group_order_params

@@ -1,4 +1,4 @@
-Feature: Visitor Places Group Order
+Feature: Customer Places Group Order
 
   Scenario: Place Group Order
     Given Julius Caesar makes an order Caesar Salad with price $8.50

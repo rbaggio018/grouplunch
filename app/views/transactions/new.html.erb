@@ -1,0 +1,17 @@
+<%= form_for @transaction do |f| %>
+
+  <%= f.fields_for :source do |source| %>
+    <%= source.label :name, 'From' %>
+    <%= source.text_field :name %>
+  <% end %>
+
+  <%= f.fields_for :destination do |destination| %>
+    <%= destination.label :name, 'To' %>
+    <%= destination.text_field :name %>
+  <% end %>
+
+  <%= f.label :amount %>
+  <%= f.text_field :amount %>
+
+  <%= f.submit 'Transfer' %>
+<% end %>
