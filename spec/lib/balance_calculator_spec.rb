@@ -4,10 +4,11 @@ describe BalanceCalculator do
 
   describe '.calculate' do
     [
-      %w( 5.0   10.0  20.0  0.0   0.0   0.0   35.0  -5.0   -10.0   15.0   simple_case),
-      %w( 5.0   10.0  20.0  0.0   0.0   0.0   28.0  -4.0   -8.0    12.0   discount_applied),
-      %w( 5.0   10.0  20.0  0.0   0.0   0.0   42.0  -6.0   -12.0   18.0   tax_applied),
-      %w( 5.0   10.0  20.0  1.25  -2.25 3.25  42.0  -4.75  -14.25  21.25  with_init_balance),
+      %w( 5.0   10.0  20.0  0.0   0.0   0.0   35    -5.0   -10.0   15.0   simple_case),
+      %w( 5.0   10.0  20.0  0.0   0.0   0.0   28    -4.0   -8.0    12.0   discount_applied),
+      %w( 5.0   10.0  20.0  0.0   0.0   0.0   42    -6.0   -12.0   18.0   tax_applied),
+      %w( 5.0   10.0  20.0  0.0   0.0   0.0   0     0.0     0.0     0.0   free_lunch),
+      %w( 5.0   10.0  20.0  1.25  -2.25 3.25  42    -4.75  -14.25  21.25  with_init_balance),
       %w( 8.95  7.25  6.25  0.0   0.0   0.0   24.03 -9.58  -7.76   17.34  round_needed)
     ].each do |user1_orded, user2_ordered, user3_ordered,
                 user1_init_balance, user2_init_balance, user3_init_balance,
