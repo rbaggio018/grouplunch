@@ -11,7 +11,7 @@ class OrdersController < ApplicationController
 
   def create
     customer = User.find_or_create_by(name: params[:order][:customer][:name])
-    item = Item.create(name: params[:order][:item][:name], price: params[:order][:item][:price])
+    item = Item.find_or_create_by(name: params[:order][:item][:name], price: params[:order][:item][:price])
     Order.create(customer: customer, item: item)
     redirect_to :action => :index
   end

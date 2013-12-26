@@ -40,7 +40,7 @@ describe OrdersController do
         }.to change(User, :count).by(1)
       end
 
-      it 'associates order and new user' do
+      it 'associates order with new user' do
         post :create, order: order_params
         expect(Order.last.customer).to eq(User.last)
       end
@@ -58,6 +58,50 @@ describe OrdersController do
       it 'associates order with the existing user' do
         post :create, order: order_params
         expect(Order.last.customer).to eq(existing_user)
+      end
+    end
+
+    context 'new item' do
+
+      it 'creates a new item' do
+        expect{
+          post :create, order: order_params
+        }.to change(Item, :count).by(1)
+      end
+
+      it 'associates order with new item' do
+        post :create, order: order_params
+        expect(Order.last.item).to eq(Item.last)
+      end
+    end
+
+    context 'existing item' do
+      let!(:existing_item) { FactoryGirl.create(:item, name: "Item", price: 6.95) }
+
+      it 'does not create item' do
+        expect{
+          post :create, order: order_params
+        }.to change(Item, :count).by(0)
+      end
+
+      it 'associates order with existing item' do
+        post :create, order: order_params
+        expect(Order.last.item).to eq(existing_item)
+      end
+    end
+
+    context 'new item with same name but different price' do
+      let!(:item) { FactoryGirl.create(:item, name: "Item", price: 7.25) }
+
+      it 'creates a new item' do
+        expect{
+          post :create, order: order_params
+        }.to change(Item, :count).by(1)
+      end
+
+      it 'associates order with new item' do
+        post :create, order: order_params
+        expect(Order.last.item).to eq(Item.last)
       end
     end
   end
