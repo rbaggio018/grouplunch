@@ -10,13 +10,9 @@ class OrdersController < ApplicationController
   end
 
   def create
-    Order.create(order_params)
+    customer = User.find_or_create_by(name: params[:order][:customer][:name])
+    item = Item.create(name: params[:order][:item][:name], price: params[:order][:item][:price])
+    Order.create(customer: customer, item: item)
     redirect_to :action => :index
   end
-
-  private
-
-    def order_params
-      params.require(:order).permit(item_attributes: [:name, :price], customer_attributes: [:name])
-    end
 end

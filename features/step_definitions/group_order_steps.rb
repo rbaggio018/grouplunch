@@ -6,6 +6,6 @@ When(/^(.*) places a group order with total \$(.*)$/) do |user, total|
 end
 
 Then(/^(.*) should have \$(.*) as balance$/) do |user, balance|
-  visit user_path(User.find_by_name(user))
+  visit user_path(User.where(name: user).first)
   page.should have_content balance
 end

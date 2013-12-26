@@ -6,8 +6,8 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = Transaction.new(transaction_params)
-    if @transaction.source = User.find_by_name(params[:transaction][:source][:name])
-      if @transaction.destination = User.find_by_name(params[:transaction][:destination][:name])
+    if @transaction.source = User.where(name: params[:transaction][:source][:name]).first
+      if @transaction.destination = User.where(name: params[:transaction][:destination][:name]).first
         @transaction.save!
         redirect_to users_path and return
       else

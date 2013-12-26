@@ -16,8 +16,8 @@ describe OrdersController do
   describe 'POST#create' do
     let(:order_params) {
       {
-        item_attributes: { name: "Item", price: 6.95 },
-        customer_attributes: { name: "Customer" }
+        item: { name: "Item", price: 6.95 },
+        customer: { name: "Customer" }
       }
     }
 
@@ -30,6 +30,35 @@ describe OrdersController do
     it 'redirects to order list' do
       post :create, order: order_params
       expect(response).to redirect_to orders_path
+    end
+
+    context 'new customer' do
+
+      it 'creates a new user' do
+        expect{
+          post :create, order: order_params
+        }.to change(User, :count).by(1)
+      end
+
+      it 'associates order and new user' do
+        post :create, order: order_params
+        expect(Order.last.customer).to eq(User.last)
+      end
+    end
+
+    context 'return customer' do
+      let!(:existing_user) { FactoryGirl.create(:user, name: "Customer") }
+
+      it 'does not create user' do
+        expect{
+          post :create, order: order_params
+        }.to change(User, :count).by(0)
+      end
+
+      it 'associates order with the existing user' do
+        post :create, order: order_params
+        expect(Order.last.customer).to eq(existing_user)
+      end
     end
   end
 

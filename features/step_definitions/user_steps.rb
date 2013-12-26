@@ -3,5 +3,9 @@ Given(/^(.*) has a balance of \$(.*)$/) do |user, balance|
 end
 
 Then(/^(.*) should have a balance of \$(.*)$/) do |user, balance|
-  expect(User.find_by_name(user).balance).to eq(balance.to_d)
+  expect(User.where(name: user).first.balance).to eq(balance.to_d)
+end
+
+Then(/^We should have only one user named (.*)$/) do |name|
+  expect(User.where(name: name).count).to eq(1)
 end

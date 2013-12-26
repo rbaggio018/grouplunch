@@ -2,7 +2,7 @@ class GroupOrdersController < ApplicationController
 
   def create
     group_order = GroupOrder.new(group_order_params)
-    if group_order.customer = User.find_by_name(params[:group_order][:customer][:name])
+    if group_order.customer = User.where(name: params[:group_order][:customer][:name]).first
       GroupOrder.transaction do # need to test transaction
         group_order.save!
         BalanceCalculator.calculate(group_order.reload)
