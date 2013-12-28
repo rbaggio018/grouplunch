@@ -125,10 +125,16 @@ describe OrdersController do
       end
     end
 
-    context 'failed to create order' do
+    context 'not valid' do
       before do
         order_params[:customer][:name] = ""
         post :create, order: order_params
+      end
+
+      it 'does not create a new order' do
+        expect{
+          post :create, order: order_params
+        }.to change(Order, :count).by(0)
       end
 
       it 'renders new template' do
