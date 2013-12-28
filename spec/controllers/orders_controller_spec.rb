@@ -32,6 +32,11 @@ describe OrdersController do
       expect(response).to redirect_to orders_path
     end
 
+    it 'shows notice' do
+      post :create, order: order_params
+      expect(flash[:notice]).not_to be_nil
+    end
+
     context 'new customer' do
 
       it 'creates a new user' do
@@ -117,6 +122,21 @@ describe OrdersController do
       it 'associates order with new item' do
         post :create, order: order_params
         expect(Order.last.item).to eq(Item.last)
+      end
+    end
+
+    context 'failed to create order' do
+      before do
+        order_params[:customer][:name] = ""
+        post :create, order: order_params
+      end
+
+      it 'renders new template' do
+        expect(response).to render_template(:new)
+      end
+
+      it 'shows error message' do
+        expect(flash[:error]).not_to be_nil
       end
     end
   end

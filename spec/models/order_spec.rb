@@ -19,5 +19,17 @@ describe Order do
 
       it { should_not be_valid }
     end
+
+    context 'customer is not valid' do
+      before { order.customer.name = "" }
+
+      it { should_not be_valid }
+    end
+
+    context 'item is not valid' do
+      before { order.item.name = "" }
+
+      it { should_not be_valid }
+    end
   end
 end

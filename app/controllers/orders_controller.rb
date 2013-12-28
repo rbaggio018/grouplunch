@@ -16,7 +16,14 @@ class OrdersController < ApplicationController
       specs: params[:order][:item][:specs],
       price: params[:order][:item][:price]
     })
-    Order.create(customer: customer, item: item)
-    redirect_to :action => :index
+    @order = Order.new(customer: customer, item: item)
+
+    if @order.save
+      flash[:notice] = "Successfully ordered"
+      redirect_to :action => :index
+    else
+      flash[:error] = @order.errors.full_messages.to_sentence
+      render :new
+    end
   end
 end
