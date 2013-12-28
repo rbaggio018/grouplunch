@@ -4,6 +4,7 @@ class GroupOrder < ActiveRecord::Base
   has_many :orders
 
   validates :customer, :orders, presence: true
+  validates_associated :customer
   validates :total,
             presence:true,
             numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 10000 },

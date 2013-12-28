@@ -2,14 +2,16 @@ class GroupOrdersController < ApplicationController
 
   def create
     group_order = GroupOrder.new(group_order_params)
-    if group_order.customer = User.where(name: params[:group_order][:customer][:name]).first
-      GroupOrder.transaction do # need to test transaction
-        group_order.save!
+    group_order.customer = User.where(name: params[:group_order][:customer][:name]).first
+    if group_order.valid?
+      GroupOrder.transaction do # transaction is not tested
+        group_order.save
         BalanceCalculator.calculate(group_order.reload)
       end
+      flash[:notice] = "Successfully ordered"
       redirect_to users_path
     else
-      flash[:error] = "Please enter valid Name"
+      flash[:error] = group_order.errors.full_messages.to_sentence
       redirect_to orders_path
     end
   end
