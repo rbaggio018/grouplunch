@@ -6,6 +6,7 @@ class Transaction < ActiveRecord::Base
   after_create :update_balances
 
   validates :source, :destination, presence: true
+  validates_associated :source, :destination
   validates :amount,
             presence:true,
             numericality: { greater_than: 0, less_than_or_equal_to: 100000 },

@@ -6,17 +6,16 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = Transaction.new(transaction_params)
-    if @transaction.source = User.where(name: params[:transaction][:source][:name]).first
-      if @transaction.destination = User.where(name: params[:transaction][:destination][:name]).first
-        @transaction.save!
-        redirect_to users_path and return
-      else
-        flash[:error] = "Please enter valid Destination"
-      end
+    @transaction.source = User.where(name: params[:transaction][:source][:name]).first
+    @transaction.destination = User.where(name: params[:transaction][:destination][:name]).first
+
+    if @transaction.save
+      flash[:notice] = "Successfully trasferred"
+      redirect_to users_path
     else
-      flash[:error] = "Please enter valid Source"
+      flash[:error] = "Please enter valid Destination"
+      render :new
     end
-    render 'new'
   end
 
   private

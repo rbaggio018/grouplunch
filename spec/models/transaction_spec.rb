@@ -61,6 +61,18 @@ describe Transaction do
 
       it { should be_valid }
     end
+
+    context 'source is not valid' do
+      before { transaction.source.name = "" }
+
+      it { should_not be_valid }
+    end
+
+    context 'destination is not valid' do
+      before { transaction.destination.name = "" }
+
+      it { should_not be_valid }
+    end
   end
 
   describe '.create' do
