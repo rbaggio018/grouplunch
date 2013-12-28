@@ -126,10 +126,7 @@ describe OrdersController do
     end
 
     context 'not valid' do
-      before do
-        order_params[:customer][:name] = ""
-        post :create, order: order_params
-      end
+      before { order_params[:customer][:name] = "" }
 
       it 'does not create a new order' do
         expect{
@@ -138,10 +135,12 @@ describe OrdersController do
       end
 
       it 'renders new template' do
+        post :create, order: order_params
         expect(response).to render_template(:new)
       end
 
       it 'shows error message' do
+        post :create, order: order_params
         expect(flash[:error]).not_to be_nil
       end
     end
