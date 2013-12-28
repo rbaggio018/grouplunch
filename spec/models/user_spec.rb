@@ -4,9 +4,9 @@ describe User do
   let(:user) { FactoryGirl.build(:user) }
   subject { user }
 
-  it { should be_valid }
-
   describe 'validations' do
+
+    it { should be_valid }
 
     context 'without a name' do
       before { user.name = "" }

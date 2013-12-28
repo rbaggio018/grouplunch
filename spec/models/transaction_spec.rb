@@ -4,9 +4,9 @@ describe Transaction do
   let(:transaction) { FactoryGirl.build :transaction }
   subject { transaction }
 
-  it { should be_valid }
-
   describe 'validations' do
+
+    it { should be_valid }
 
     context 'without a source' do
       before { transaction.source = nil }
