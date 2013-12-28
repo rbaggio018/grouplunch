@@ -1,29 +1,59 @@
 require 'spec_helper'
 
 describe GroupOrder do
+  let(:group_order) { FactoryGirl.create :group_order }
+  subject { group_order }
 
-  describe '.create' do
-    let(:order1) { FactoryGirl.create(:order) }
-    let(:order2) { FactoryGirl.create(:order) }
-    let(:group_order_params) {
-      {
-        total: 20,
-        order_ids: [order1.id, order2.id]
-      }
-    }
+  describe 'validations' do
 
-    it 'creates a new group order' do
-      expect {
-        GroupOrder.create(group_order_params)
-      }.to change(GroupOrder, :count).by(1)
+    it { should be_valid }
+
+    context 'without a customer' do
+      before { group_order.customer = nil }
+
+      it { should_not be_valid }
     end
 
-    describe 'new created group order' do
-      let(:new_group_order) { GroupOrder.create(group_order_params) }
-      subject { new_group_order }
+    context 'without an order' do
+      before { group_order.orders = [] }
 
-      its(:total) { should eq(20.0) }
-      its(:orders) { should =~ [order1, order2]}
+      it { should_not be_valid }
+    end
+
+    context 'without a total' do
+      before { group_order.total = "" }
+
+      it { should_not be_valid }
+    end
+
+    context 'with no numerical total' do
+      before { group_order.total = "text" }
+
+      it { should_not be_valid }
+    end
+
+    context 'with a total which precision more than 2' do
+      before { group_order.total = 0.009 }
+
+      it { should_not be_valid }
+    end
+
+    context 'with a negative total' do
+      before { group_order.total = -0.1 }
+
+      it { should_not be_valid }
+    end
+
+    context 'with a total of 10000.01' do
+      before { group_order.total = 10000.01 }
+
+      it { should_not be_valid }
+    end
+
+    context 'with a total of 10000' do
+      before { group_order.total = 10000 }
+
+      it { should be_valid }
     end
   end
 

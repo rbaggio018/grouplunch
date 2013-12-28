@@ -27,12 +27,12 @@ describe GroupOrdersController do
         }.to change(GroupOrder, :count).by(1)
       end
 
-      it 'associates group_order and orders' do
+      it 'associates group order and orders' do
         post :create, group_order: group_order_params
         expect(GroupOrder.last.orders).to match_array([order1, order2])
       end
 
-      it 'associates group_order and customer' do
+      it 'associates group order and customer' do
         post :create, group_order: group_order_params
         expect(GroupOrder.last.customer).to eq(customer)
       end
