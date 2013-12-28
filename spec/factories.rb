@@ -19,4 +19,10 @@ FactoryGirl.define do
     orders { 3.times.map { FactoryGirl.create :order } }
     customer { FactoryGirl.create :user }
   end
+
+  factory :transaction do
+    source { FactoryGirl.create :user }
+    destination { FactoryGirl.create :user }
+    amount "10.0"
+  end
 end

@@ -5,6 +5,9 @@ class Transaction < ActiveRecord::Base
 
   after_create :update_balances
 
+  validates :source, :destination, presence: true
+  validates :amount, presence:true, numericality: { greater_than: 0, less_than_or_equal_to: 100000 }, format: { with: /\A\d+??(?:\.\d{0,2})?\z/ }
+
   private
 
     def update_balances
