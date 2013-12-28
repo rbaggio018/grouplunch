@@ -1,11 +1,11 @@
 <%= form_for @transaction do |f| %>
 
-  <%= f.fields_for :source do |source| %>
+  <%= f.fields_for :source, @transaction.source do |source| %>
     <%= source.label :name, 'From' %>
     <%= source.text_field :name %>
   <% end %>
 
-  <%= f.fields_for :destination do |destination| %>
+  <%= f.fields_for :destination, @transaction.destination do |destination| %>
     <%= destination.label :name, 'To' %>
     <%= destination.text_field :name %>
   <% end %>

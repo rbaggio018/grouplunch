@@ -55,9 +55,14 @@ describe GroupOrdersController do
         }.to change(GroupOrder, :count).by(0)
       end
 
-      it 'redirects to order list' do
+      it 'renders orders/index' do
         post :create, group_order: group_order_params
-        expect(response).to redirect_to orders_path
+        expect(response).to render_template("orders/index")
+      end
+
+      it 'assigns @orders' do
+        post :create, group_order: group_order_params
+        expect(assigns(:orders)).to match_array([order1, order2])
       end
 
       it 'shows error message' do

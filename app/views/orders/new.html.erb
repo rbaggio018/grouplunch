@@ -1,6 +1,6 @@
 <%= form_for @order do |f| %>
 
-  <%= f.fields_for :item do |item| %>
+  <%= f.fields_for :item, @order.item do |item| %>
     <%= item.label :name, "Order" %>
     <%= item.text_field :name %>
 
@@ -11,7 +11,7 @@
     <%= item.text_field :price %>
   <% end %>
 
-  <%= f.fields_for :customer do |customer| %>
+  <%= f.fields_for :customer, @order.customer do |customer| %>
     <%= customer.label :name %>
     <%= customer.text_field :name %>
   <% end %>
