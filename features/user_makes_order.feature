@@ -7,7 +7,7 @@ Feature: User Makes Order
     When Julius Caesar makes an order Caesar Salad with Balsamic Vinaigrette which has price $8.50
     Then Caesar Salad with Balsamic Vinaigrette which has price $8.5 under Julius Caesar should be in the order list
 
-  Scenario: Return User Makes Order
+  Scenario: Returning User Makes Order
     Given We have a user named Julius Caesar
     When  Julius Caesar makes an order Caesar Salad with Balsamic Vinaigrette which has price $8.5
     Then  We should have only one user named Julius Caesar

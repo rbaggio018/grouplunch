@@ -51,7 +51,7 @@ describe OrdersController do
       end
     end
 
-    context 'return customer' do
+    context 'returning customer' do
       let!(:existing_user) { FactoryGirl.create(:user, name: "Customer") }
 
       it 'does not create user' do
