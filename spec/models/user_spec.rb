@@ -31,6 +31,30 @@ describe User do
 
       it { should_not be_valid }
     end
+
+    context 'with a balance of 999999.001' do
+      before { user.balance = 999999.001 }
+
+      it { should_not be_valid }
+    end
+
+    context 'with a balance of 999999' do
+      before { user.balance = 999999 }
+
+      it { should be_valid }
+    end
+
+    context 'with a balance of -999999.001' do
+      before { user.balance = -999999.001 }
+
+      it { should_not be_valid }
+    end
+
+    context 'with a balance of -999999' do
+      before { user.balance = -999999 }
+
+      it { should be_valid }
+    end
   end
 
   describe 'initial balance' do
