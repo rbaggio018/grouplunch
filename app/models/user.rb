@@ -12,6 +12,6 @@ class User < ActiveRecord::Base
             numericality: { greater_than_or_equal_to: -999999, less_than_or_equal_to: 999999 }
 
   def add_balance(amount)
-    update_attributes(balance: balance + amount)
+    update_attributes!(balance: balance + amount)
   end
 end

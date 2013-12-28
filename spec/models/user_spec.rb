@@ -105,5 +105,13 @@ describe User do
 
       its(:balance) { should eq(-0.3) }
     end
+
+    context 'not valid' do
+      before { user.balance = 6.95 }
+
+      it 'throws exception' do
+        expect { user.add_balance(999999) }.to raise_error
+      end
+    end
   end
 end
