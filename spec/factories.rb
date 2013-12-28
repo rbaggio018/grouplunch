@@ -7,7 +7,8 @@ FactoryGirl.define do
 
   factory :item do
     sequence(:name) { |n| "Item #{n}" }
-    price "6.95"
+    sequence(:specs) { |n| "Specs #{n}" }
+    price 6.95
   end
 
   factory :user do
@@ -15,7 +16,7 @@ FactoryGirl.define do
   end
 
   factory :group_order do
-    total "20.0"
+    total 20.0
     orders { 3.times.map { FactoryGirl.create :order } }
     customer { FactoryGirl.create :user }
   end
@@ -23,6 +24,6 @@ FactoryGirl.define do
   factory :transaction do
     source { FactoryGirl.create :user }
     destination { FactoryGirl.create :user }
-    amount "10.0"
+    amount 10.0
   end
 end
