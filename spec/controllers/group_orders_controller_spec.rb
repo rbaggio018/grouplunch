@@ -1,15 +1,15 @@
 require 'spec_helper'
 
 describe GroupOrdersController do
+  let(:current_user) { FactoryGirl.create(:user) }
+  before { sign_in current_user }
 
   describe 'POST#create' do
     let(:order1) { FactoryGirl.create(:order) }
     let(:order2) { FactoryGirl.create(:order) }
-    let!(:customer) { FactoryGirl.create(:user, name: "Customer") }
 
     let(:group_order_params) {
       {
-        customer: { name: "Customer" },
         total: 20,
         order_ids: [order1.id, order2.id]
       }
@@ -36,9 +36,9 @@ describe GroupOrdersController do
       expect(GroupOrder.last.orders).to match_array([order1, order2])
     end
 
-    it 'associates group order and customer' do
+    it 'associates group order and current user' do
       post :create, group_order: group_order_params
-      expect(GroupOrder.last.customer).to eq(customer)
+      expect(GroupOrder.last.customer).to eq(current_user)
     end
 
     it 'updates balances' do
@@ -47,7 +47,7 @@ describe GroupOrdersController do
     end
 
     context 'not valid' do
-      before { group_order_params[:customer][:name] = "" }
+      before { group_order_params[:total] = "" }
 
       it 'does not create group order' do
         expect {

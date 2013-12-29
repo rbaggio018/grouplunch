@@ -2,7 +2,7 @@ class GroupOrdersController < ApplicationController
 
   def create
     @group_order = GroupOrder.new(group_order_params)
-    @group_order.customer = User.where(name: params[:group_order][:customer][:name]).first
+    @group_order.customer = current_user
     if @group_order.valid?
       GroupOrder.transaction do # transaction is not tested
         @group_order.save

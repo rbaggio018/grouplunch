@@ -10,11 +10,6 @@
 
 <%= form_for @group_order do |f| %>
 
-  <%= f.fields_for :customer, @group_order.customer do |customer| %>
-    <%= customer.label :name %>
-    <%= customer.text_field :name %>
-  <% end %>
-
   <%= f.label :total %>
   <%= f.text_field :total %>
 

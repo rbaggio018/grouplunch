@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe UsersController do
+  let(:current_user) { FactoryGirl.create(:user) }
+  before { sign_in current_user }
 
   describe 'GET#show' do
 

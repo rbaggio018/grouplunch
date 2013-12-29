@@ -1,6 +1,7 @@
 When(/^(.*) places a group order with total \$(.*)$/) do |user, total|
+  step "I log in as #{user}"
+
   visit orders_path
-  fill_in 'Name', with: user
   fill_in 'Total', with: total
   click_button 'Place'
 end

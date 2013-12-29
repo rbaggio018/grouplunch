@@ -11,10 +11,5 @@
     <%= item.text_field :price %>
   <% end %>
 
-  <%= f.fields_for :customer, @order.customer do |customer| %>
-    <%= customer.label :name %>
-    <%= customer.text_field :name %>
-  <% end %>
-
   <%= f.submit "Place" %>
 <% end %>

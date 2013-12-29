@@ -6,17 +6,16 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = Order.new(item: Item.new, customer: User.new)
+    @order = Order.new(item: Item.new)
   end
 
   def create
-    customer = User.find_or_create_by(name: params[:order][:customer][:name])
     item = Item.find_or_create_by({
       name: params[:order][:item][:name],
       specs: params[:order][:item][:specs],
       price: params[:order][:item][:price]
     })
-    @order = Order.new(customer: customer, item: item)
+    @order = Order.new(customer: current_user, item: item)
 
     if @order.save
       flash[:notice] = "Successfully ordered"

@@ -6,8 +6,8 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = Transaction.new(transaction_params)
-    @transaction.source = User.where(name: params[:transaction][:source][:name]).first
-    @transaction.destination = User.where(name: params[:transaction][:destination][:name]).first
+    @transaction.source = User.where(email: params[:transaction][:source][:email]).first
+    @transaction.destination = current_user
 
     if @transaction.save
       flash[:notice] = "Successfully trasferred"

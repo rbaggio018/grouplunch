@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe OrdersController do
+  let(:current_user) { FactoryGirl.create(:user) }
+  before { sign_in current_user }
 
   describe 'GET#new' do
 
@@ -16,8 +18,7 @@ describe OrdersController do
   describe 'POST#create' do
     let(:order_params) {
       {
-        item: { name: "Item", price: 6.95, specs: "Specs" },
-        customer: { name: "Customer" }
+        item: { name: "Item", price: 6.95, specs: "Specs" }
       }
     }
 
@@ -37,33 +38,9 @@ describe OrdersController do
       expect(flash[:notice]).not_to be_nil
     end
 
-    context 'new customer' do
-
-      it 'creates a new user' do
-        expect{
-          post :create, order: order_params
-        }.to change(User, :count).by(1)
-      end
-
-      it 'associates order with new user' do
-        post :create, order: order_params
-        expect(Order.last.customer).to eq(User.last)
-      end
-    end
-
-    context 'returning customer' do
-      let!(:existing_user) { FactoryGirl.create(:user, name: "Customer") }
-
-      it 'does not create user' do
-        expect{
-          post :create, order: order_params
-        }.to change(User, :count).by(0)
-      end
-
-      it 'associates order with the existing user' do
-        post :create, order: order_params
-        expect(Order.last.customer).to eq(existing_user)
-      end
+    it 'associates order with current user' do
+      post :create, order: order_params
+      expect(Order.last.customer).to eq(current_user)
     end
 
     context 'new item' do
@@ -126,7 +103,7 @@ describe OrdersController do
     end
 
     context 'not valid' do
-      before { order_params[:customer][:name] = "" }
+      before { order_params[:item][:name] = "" }
 
       it 'does not create a new order' do
         expect{
