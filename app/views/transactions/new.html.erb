@@ -1,8 +1,8 @@
 <%= form_for @transaction do |f| %>
 
   <%= f.fields_for :source, @transaction.source do |source| %>
-    <%= source.label :email, 'From' %>
-    <%= source.text_field :email %>
+    <%= source.label :email, 'From (email)' %>
+    <%= source.email_field :email %>
   <% end %>
 
   <%= f.label :amount %>
