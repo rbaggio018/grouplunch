@@ -73,6 +73,12 @@ describe Transaction do
 
       it { should_not be_valid }
     end
+
+    context 'source and destination is the same' do
+      before { transaction.destination = transaction.source }
+
+      it { should_not be_valid }
+    end
   end
 
   describe '.create' do
