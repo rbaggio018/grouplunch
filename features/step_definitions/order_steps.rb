@@ -23,3 +23,10 @@ Then(/^(.*) with (.*) which has price \$(.*) under (.*) should not be in the ord
   page.should_not have_content price
   page.should_not have_content user
 end
+
+Then(/^(.*) with (.*) which has price \$(.*) should be on home page$/) do |order, specs, price|
+  visit root_url
+  expect(find_field('Order').value).to eq(order)
+  expect(find_field('Specs').value).to eq(specs)
+  expect(find_field('Price').value).to eq(price)
+end

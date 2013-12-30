@@ -6,7 +6,12 @@ class OrdersController < ApplicationController
   end
 
   def new
-    @order = Order.new(item: Item.new)
+    if @order = Order.where(customer: current_user, group_order_id: nil).first
+      render :show
+    else
+      @order = Order.new(item: Item.new)
+      render :new
+    end
   end
 
   def create
@@ -19,7 +24,7 @@ class OrdersController < ApplicationController
 
     if @order.save
       flash[:notice] = "Successfully ordered"
-      redirect_to :action => :index
+      redirect_to root_url
     else
       flash[:error] = @order.errors.full_messages.to_sentence
       render :new

@@ -1,15 +1,1 @@
-<%= form_for @order do |f| %>
-
-  <%= f.fields_for :item, @order.item do |item| %>
-    <%= item.label :name, "Order" %>
-    <%= item.text_field :name %>
-
-    <%= item.label :specs %>
-    <%= item.text_field :specs %>
-
-    <%= item.label :price, "Price" %>
-    <%= item.text_field :price %>
-  <% end %>
-
-  <%= f.submit "Place" %>
-<% end %>
+<%= render 'order_form', readonly: false %>

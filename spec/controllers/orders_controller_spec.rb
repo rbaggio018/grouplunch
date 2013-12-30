@@ -6,12 +6,42 @@ describe OrdersController do
 
   describe 'GET#new' do
 
-    it 'assigns @order' do
-      order = Order.new
-      Order.stub(:new).and_return(order)
+    it 'assigns @order with new order' do
       get :new
+      expect(assigns(:order)).to be_new_record
+    end
 
-      expect(assigns(:order)).to eq(order)
+    it 'renders new template' do
+      get :new
+      expect(response).to render_template(:new)
+    end
+
+    context 'current_user has ordered' do
+      let!(:order) { FactoryGirl.create(:order, customer: current_user) }
+
+      it 'assigns @order with order of current user' do
+        get :new
+        expect(assigns(:order)).to eq(order)
+      end
+
+      it 'renders show template' do
+        get :new
+        expect(response).to render_template(:show)
+      end
+
+      context 'the order of current_user has been group placed' do
+        before { FactoryGirl.create(:group_order, orders: [order]) }
+
+        it 'assigns @order with new order' do
+          get :new
+          expect(assigns(:order)).to be_new_record
+        end
+
+        it 'renders new template' do
+          get :new
+          expect(response).to render_template(:new)
+        end
+      end
     end
   end
 
@@ -28,9 +58,9 @@ describe OrdersController do
       }.to change(Order, :count).by(1)
     end
 
-    it 'redirects to order list' do
+    it 'redirects to home page' do
       post :create, order: order_params
-      expect(response).to redirect_to orders_path
+      expect(response).to redirect_to root_url
     end
 
     it 'shows notice' do

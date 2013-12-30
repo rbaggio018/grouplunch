@@ -17,7 +17,7 @@ Grouplunch::Application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
-  resources :orders, :only => [:index, :create]
+  resources :orders, :only => [:index, :create, :show]
   resources :group_orders, :only => [:index, :create]
   resources :users, :only => [:index, :show]
   resources :transactions, :only => [:new, :create]
