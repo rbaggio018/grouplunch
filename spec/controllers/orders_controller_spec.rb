@@ -190,7 +190,7 @@ describe OrdersController do
   end
 
   describe 'GET#edit' do
-    let!(:order) { FactoryGirl.create(:order) }
+    let(:order) { FactoryGirl.create(:order, customer: current_user) }
 
     context 'group order has not been placed' do
       before { get :edit, id: order.id }
@@ -222,10 +222,23 @@ describe OrdersController do
         expect(flash[:error]).not_to be_nil
       end
     end
+
+    context 'order of someone else' do
+      let(:order_of_aother_customer) { FactoryGirl.create(:order) }
+      before { get :edit, id: order_of_aother_customer.id }
+
+      it 'redirects to home page' do
+        expect(response).to redirect_to(root_url)
+      end
+
+      it 'shows alert' do
+        expect(flash[:alert]).not_to be_nil
+      end
+    end
   end
 
   describe 'PUT#update' do
-    let!(:order) { FactoryGirl.create(:order) }
+    let(:order) { FactoryGirl.create(:order, customer: current_user) }
     let(:order_params) {
       {
         item: { name: "Item", price: 6.95, specs: "Specs" }
@@ -287,6 +300,19 @@ describe OrdersController do
 
       it 'shows error message' do
         expect(flash[:error]).not_to be_nil
+      end
+    end
+
+    context 'order of someone else' do
+      let(:order_of_aother_customer) { FactoryGirl.create(:order) }
+      before { put :update, id: order_of_aother_customer.id, order: order_params }
+
+      it 'redirects to home page' do
+        expect(response).to redirect_to(root_url)
+      end
+
+      it 'shows alert' do
+        expect(flash[:alert]).not_to be_nil
       end
     end
   end

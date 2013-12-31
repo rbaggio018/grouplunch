@@ -1,4 +1,8 @@
 class OrdersController < ApplicationController
+  before_filter :assign_order, only: [:edit, :update]
+  before_filter :check_authority, except: [:index, :new, :create]
+  before_filter :check_availability, except: [:index, :new, :create]
+  before_filter :setup_item, only: [:create, :update]
 
   def index
     @orders = Order.where(group_order_id: nil).includes(:item, :customer)
@@ -15,51 +19,60 @@ class OrdersController < ApplicationController
   end
 
   def create
-    item = Item.find_or_create_by({
-      name: params[:order][:item][:name],
-      specs: params[:order][:item][:specs],
-      price: params[:order][:item][:price]
-    })
-    @order = Order.new(customer: current_user, item: item)
+    @order = Order.new(customer: current_user, item: @item)
 
     if @order.save
       flash[:notice] = "Successfully ordered"
       redirect_to root_url
     else
-      flash[:error] = @order.errors.full_messages.to_sentence
+      flash[:error] = readable_error_message
       render :new
     end
   end
 
   def edit
-    @order = Order.find(params[:id])
-    if @order.group_order
-      flash[:error] = "Can't edit an order has been group placed"
-      redirect_to @order.group_order
+  end
+
+  def update
+    @order.item = @item
+    if @order.save
+      flash[:notice] = "Successfully updated"
+      render :show
     else
+      flash[:error] = readable_error_message
       render :edit
     end
   end
 
-  def update
-    @order = Order.find(params[:id])
-    if @order.group_order
-      flash[:error] = "Failed to make the change. The order has been group placed."
-      redirect_to @order.group_order
-    else
-      item = Item.find_or_create_by({
+  private
+
+    def assign_order
+      @order = Order.find(params[:id])
+    end
+
+    def check_authority
+      if @order.customer != current_user
+        flash[:alert] = "You don't have access to the order"
+        redirect_to root_url and return
+      end
+    end
+
+    def check_availability
+      if @order.group_order
+        flash[:error] = "You can't change an order which has been group ordered."
+        redirect_to @order.group_order and return
+      end
+    end
+
+    def setup_item
+      @item = Item.find_or_create_by({
         name: params[:order][:item][:name],
         specs: params[:order][:item][:specs],
         price: params[:order][:item][:price]
       })
-      @order.item = item
-      if @order.save
-        flash[:notice] = "Successfully updated"
-        render :show
-      else
-        flash[:error] = @order.errors.full_messages.to_sentence
-        render :edit
-      end
     end
-  end
+
+    def readable_error_message
+      @order.errors.full_messages.to_sentence
+    end
 end
