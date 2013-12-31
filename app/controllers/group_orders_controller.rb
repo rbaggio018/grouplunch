@@ -17,6 +17,10 @@ class GroupOrdersController < ApplicationController
     end
   end
 
+  def show
+    @group_order = GroupOrder.find(params[:id])
+  end
+
   private
 
     def group_order_params

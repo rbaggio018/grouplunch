@@ -30,3 +30,14 @@ Then(/^(.*) with (.*) which has price \$(.*) should be on home page$/) do |order
   expect(find_field('Specs').value).to eq(specs)
   expect(find_field('Price').value).to eq(price)
 end
+
+When(/^(.*) edits his order (.*) with (.*) which has price \$(.*)$/) do |user, order, specs, price|
+  step "I log in as #{user}"
+
+  visit root_url
+  click_link 'Change'
+  fill_in 'Order',  with: order
+  fill_in 'Specs',  with: specs
+  fill_in 'Price',  with: price
+  click_button 'Place'
+end

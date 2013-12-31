@@ -71,4 +71,17 @@ describe GroupOrdersController do
       end
     end
   end
+
+  describe 'GET#show' do
+    let(:group_order) { FactoryGirl.create(:group_order) }
+    before { get :show, id: group_order.id }
+
+    it 'assigns @group_order' do
+      expect(assigns(:group_order)).to eq(group_order)
+    end
+
+    it 'renders show template' do
+      expect(response).to render_template(:show)
+    end
+  end
 end

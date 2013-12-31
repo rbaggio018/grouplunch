@@ -17,3 +17,8 @@ Feature: Customer Makes Order
     Given Julius Caesar makes an order Caesar Salad with Balsamic Vinaigrette which has price $8.5
     When  I log in as Julius Caesar
     Then  Caesar Salad with Balsamic Vinaigrette which has price $8.5 should be on home page
+
+  Scenario: Customer Edits His Order
+    Given Julius Caesar makes an order Caesar Salad with Balsamic Vinaigrette which has price $8.5
+    When  Julius Caesar edits his order Caesar Salad with Buttermilk Ranch which has price $8.5
+    Then  Caesar Salad with Buttermilk Ranch which has price $8.5 under Julius Caesar should be in the order list

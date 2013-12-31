@@ -30,4 +30,36 @@ class OrdersController < ApplicationController
       render :new
     end
   end
+
+  def edit
+    @order = Order.find(params[:id])
+    if @order.group_order
+      flash[:error] = "Can't edit an order has been group placed"
+      redirect_to @order.group_order
+    else
+      render :edit
+    end
+  end
+
+  def update
+    @order = Order.find(params[:id])
+    if @order.group_order
+      flash[:error] = "Failed to make the change. The order has been group placed."
+      redirect_to @order.group_order
+    else
+      item = Item.find_or_create_by({
+        name: params[:order][:item][:name],
+        specs: params[:order][:item][:specs],
+        price: params[:order][:item][:price]
+      })
+      @order.item = item
+      if @order.save
+        flash[:notice] = "Successfully updated"
+        render :show
+      else
+        flash[:error] = @order.errors.full_messages.to_sentence
+        render :edit
+      end
+    end
+  end
 end

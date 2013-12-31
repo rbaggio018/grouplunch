@@ -6,39 +6,44 @@ describe OrdersController do
 
   describe 'GET#new' do
 
-    it 'assigns @order with new order' do
-      get :new
-      expect(assigns(:order)).to be_new_record
-    end
+    context 'current_user has not ordered yet' do
+      before { get :new }
 
-    it 'renders new template' do
-      get :new
-      expect(response).to render_template(:new)
+      it 'assigns @order with new order' do
+        expect(assigns(:order)).to be_new_record
+      end
+
+      it 'renders new template' do
+        expect(response).to render_template(:new)
+      end
     end
 
     context 'current_user has ordered' do
       let!(:order) { FactoryGirl.create(:order, customer: current_user) }
 
-      it 'assigns @order with order of current user' do
-        get :new
-        expect(assigns(:order)).to eq(order)
+      context 'group order has not been placed yet' do
+        before { get :new }
+
+        it 'assigns @order with order of current user' do
+          expect(assigns(:order)).to eq(order)
+        end
+
+        it 'renders show template' do
+          expect(response).to render_template(:show)
+        end
       end
 
-      it 'renders show template' do
-        get :new
-        expect(response).to render_template(:show)
-      end
-
-      context 'the order of current_user has been group placed' do
-        before { FactoryGirl.create(:group_order, orders: [order]) }
+      context 'group order has been placed' do
+        before do
+          FactoryGirl.create(:group_order, orders: [order])
+          get :new
+        end
 
         it 'assigns @order with new order' do
-          get :new
           expect(assigns(:order)).to be_new_record
         end
 
         it 'renders new template' do
-          get :new
           expect(response).to render_template(:new)
         end
       end
@@ -58,19 +63,20 @@ describe OrdersController do
       }.to change(Order, :count).by(1)
     end
 
-    it 'redirects to home page' do
-      post :create, order: order_params
-      expect(response).to redirect_to root_url
-    end
+    context 'successfully created' do
+      before { post :create, order: order_params }
 
-    it 'shows notice' do
-      post :create, order: order_params
-      expect(flash[:notice]).not_to be_nil
-    end
+      it 'redirects to home page' do
+        expect(response).to redirect_to root_url
+      end
 
-    it 'associates order with current user' do
-      post :create, order: order_params
-      expect(Order.last.customer).to eq(current_user)
+      it 'shows notice' do
+        expect(flash[:notice]).not_to be_nil
+      end
+
+      it 'associates order with current user' do
+        expect(Order.last.customer).to eq(current_user)
+      end
     end
 
     context 'new item' do
@@ -161,7 +167,7 @@ describe OrdersController do
       expect(assigns(:orders)).to eq([order])
     end
 
-    context 'group order has placed' do
+    context 'group order has been placed' do
       let!(:new_order) { FactoryGirl.create(:order) }
       before { FactoryGirl.create(:group_order, orders: [order]) }
 
@@ -180,6 +186,108 @@ describe OrdersController do
     it 'assigns @group_order' do
       get :index
       expect(assigns(:group_order).orders).to eq([order])
+    end
+  end
+
+  describe 'GET#edit' do
+    let!(:order) { FactoryGirl.create(:order) }
+
+    context 'group order has not been placed' do
+      before { get :edit, id: order.id }
+
+      it 'assigns @order' do
+        expect(assigns(:order)).to eq(order)
+      end
+
+      it 'renders edit template' do
+        expect(response).to render_template(:edit)
+      end
+    end
+
+    context 'group order has been placed' do
+      before do
+        FactoryGirl.create(:group_order, orders: [order])
+        get :edit, id: order.id
+      end
+
+      it 'assigns @order' do
+        expect(assigns(:order)).to eq(order)
+      end
+
+      it 'redirects to group order page' do
+        expect(response).to redirect_to(order.group_order)
+      end
+
+      it 'shows error message' do
+        expect(flash[:error]).not_to be_nil
+      end
+    end
+  end
+
+  describe 'PUT#update' do
+    let!(:order) { FactoryGirl.create(:order) }
+    let(:order_params) {
+      {
+        item: { name: "Item", price: 6.95, specs: "Specs" }
+      }
+    }
+
+    context 'successfully updated' do
+      before { put :update, id: order.id, order: order_params }
+
+      it 'updates the order' do
+        expect(order.reload.item.specs).to eq("Specs")
+      end
+
+      it 'assigns @order' do
+        expect(assigns(:order)).to eq(order)
+      end
+
+      it 'renders show template' do
+        expect(response).to render_template(:show)
+      end
+
+      it 'shows notice' do
+        expect(flash[:notice]).not_to be_nil
+      end
+    end
+
+    context 'group order has been placed' do
+      before do
+        FactoryGirl.create(:group_order, orders: [order])
+        put :update, id: order.id, order: order_params
+      end
+
+      it 'redirects to group order page' do
+        expect(response).to redirect_to(order.reload.group_order)
+      end
+
+      it 'shows error message' do
+        expect(flash[:error]).not_to be_nil
+      end
+    end
+
+    context 'not valid' do
+      before do
+        order_params[:item][:name] = ""
+        put :update, id: order.id, order: order_params
+      end
+
+      it 'does not update the order' do
+        expect(order.reload.item.specs).not_to eq("Specs")
+      end
+
+      it 'assigns @order' do
+        expect(assigns(:order)).to eq(order)
+      end
+
+      it 'renders edit template' do
+        expect(response).to render_template(:edit)
+      end
+
+      it 'shows error message' do
+        expect(flash[:error]).not_to be_nil
+      end
     end
   end
 end
