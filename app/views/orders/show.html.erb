@@ -1,3 +1,4 @@
 <%= render 'order_form', readonly: true %>
 
-<%= link_to 'Change', edit_order_path(@order) %>
+<%= button_to 'Changed my mind', edit_order_path(@order), :method => :get %>
+<%= button_to 'Stay hungry', @order, :method => :delete %>

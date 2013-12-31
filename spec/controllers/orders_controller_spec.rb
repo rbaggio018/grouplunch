@@ -271,6 +271,10 @@ describe OrdersController do
         put :update, id: order.id, order: order_params
       end
 
+      it 'does not update the order' do
+        expect(order.reload.item.specs).not_to eq("Specs")
+      end
+
       it 'redirects to group order page' do
         expect(response).to redirect_to(order.reload.group_order)
       end
@@ -306,6 +310,60 @@ describe OrdersController do
     context 'order of someone else' do
       let(:order_of_aother_customer) { FactoryGirl.create(:order) }
       before { put :update, id: order_of_aother_customer.id, order: order_params }
+
+      it 'redirects to home page' do
+        expect(response).to redirect_to(root_url)
+      end
+
+      it 'shows alert' do
+        expect(flash[:alert]).not_to be_nil
+      end
+    end
+  end
+
+  describe 'DELETE#destroy' do
+    let!(:order) { FactoryGirl.create(:order, customer: current_user) }
+
+    it 'deletes the order' do
+      expect {
+        delete :destroy, id: order.id
+      }.to change(Order, :count).by(-1)
+    end
+
+    context 'successfully deleted' do
+      before { delete :destroy, id: order.id }
+
+      it 'redirects to home page' do
+        expect(response).to redirect_to(root_url)
+      end
+
+      it 'shows notice' do
+        expect(flash[:notice]).not_to be_nil
+      end
+    end
+
+    context 'group order has been placed' do
+      before do
+        FactoryGirl.create(:group_order, orders: [order])
+        delete :destroy, id: order.id
+      end
+
+      it 'does not delete the order' do
+        expect(Order.find(order.id)).not_to be_nil
+      end
+
+      it 'redirects to group order page' do
+        expect(response).to redirect_to(order.reload.group_order)
+      end
+
+      it 'shows error message' do
+        expect(flash[:error]).not_to be_nil
+      end
+    end
+
+    context 'order of someone else' do
+      let(:order_of_aother_customer) { FactoryGirl.create(:order) }
+      before { delete :destroy, id: order_of_aother_customer.id }
 
       it 'redirects to home page' do
         expect(response).to redirect_to(root_url)

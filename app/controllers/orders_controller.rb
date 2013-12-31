@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  before_filter :assign_order, only: [:edit, :update]
+  before_filter :assign_order, only: [:edit, :update, :destroy]
   before_filter :check_authority, except: [:index, :new, :create]
   before_filter :check_availability, except: [:index, :new, :create]
   before_filter :setup_item, only: [:create, :update]
@@ -42,6 +42,12 @@ class OrdersController < ApplicationController
       flash[:error] = readable_error_message
       render :edit
     end
+  end
+
+  def destroy
+    @order.destroy!
+    flash[:notice] = "Successfully deleted"
+    redirect_to root_url
   end
 
   private

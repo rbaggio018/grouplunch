@@ -35,9 +35,17 @@ When(/^(.*) edits his order (.*) with (.*) which has price \$(.*)$/) do |user, o
   step "I log in as #{user}"
 
   visit root_url
-  click_link 'Change'
+  click_button 'Changed my mind'
   fill_in 'Order',  with: order
   fill_in 'Specs',  with: specs
   fill_in 'Price',  with: price
   click_button 'Place'
+end
+
+
+When(/^(.*) deletes his order$/) do |user|
+  step "I log in as #{user}"
+
+  visit root_url
+  click_button 'Stay hungry'
 end

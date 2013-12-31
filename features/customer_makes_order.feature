@@ -22,3 +22,8 @@ Feature: Customer Makes Order
     Given Julius Caesar makes an order Caesar Salad with Balsamic Vinaigrette which has price $8.5
     When  Julius Caesar edits his order Caesar Salad with Buttermilk Ranch which has price $8.5
     Then  Caesar Salad with Buttermilk Ranch which has price $8.5 under Julius Caesar should be in the order list
+
+  Scenario: Customer Deletes His Order
+    Given Julius Caesar makes an order Caesar Salad with Balsamic Vinaigrette which has price $8.5
+    When  Julius Caesar deletes his order
+    Then  Caesar Salad with Balsamic Vinaigrette which has price $8.5 under Julius Caesar should not be in the order list
