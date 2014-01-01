@@ -8,18 +8,6 @@ describe User do
 
     it { should be_valid }
 
-    context 'without a name' do
-      before { user.name = "" }
-
-      it { should_not be_valid }
-    end
-
-    context 'with duplicate name' do
-      before { FactoryGirl.create(:user, name: user.name.upcase) }
-
-      it { should_not be_valid }
-    end
-
     context 'without a balance' do
       before { user.balance = "" }
 
