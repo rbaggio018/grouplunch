@@ -19,7 +19,7 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @order = Order.new(customer: current_user, item: @item)
+    @order = Order.new(order_params.merge(customer: current_user, item: @item))
 
     if @order.save
       flash[:notice] = "Successfully ordered"
@@ -35,7 +35,7 @@ class OrdersController < ApplicationController
 
   def update
     @order.item = @item
-    if @order.save
+    if @order.update_attributes(order_params)
       flash[:notice] = "Successfully updated"
       render :show
     else
@@ -51,6 +51,10 @@ class OrdersController < ApplicationController
   end
 
   private
+
+    def order_params
+      params.require(:order).permit(:specs)
+    end
 
     def assign_order
       @order = Order.find(params[:id])
@@ -73,7 +77,6 @@ class OrdersController < ApplicationController
     def setup_item
       @item = Item.find_or_create_by({
         name: params[:order][:item][:name],
-        specs: params[:order][:item][:specs],
         price: params[:order][:item][:price]
       })
     end

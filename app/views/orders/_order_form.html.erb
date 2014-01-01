@@ -4,12 +4,12 @@
     <%= item.label :name, "Order" %>
     <%= item.text_field :name, readonly: readonly %>
 
-    <%= item.label :specs %>
-    <%= item.text_field :specs, readonly: readonly %>
-
     <%= item.label :price, "Price" %>
     <%= item.text_field :price, readonly:readonly %>
   <% end %>
+
+  <%= f.label :specs %>
+  <%= f.text_field :specs, readonly: readonly %>
 
   <%= f.submit "Place" if !readonly %>
 <% end %>

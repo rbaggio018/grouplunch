@@ -8,9 +8,9 @@ Feature: Customer Makes Order
     Then  Caesar Salad with Balsamic Vinaigrette which has price $8.5 under Julius Caesar should be in the order list
 
   Scenario: Customer Orders Existing Item
-    Given We have an item named Caesar Salad with Balsamic Vinaigrette which has price $8.5
+    Given We have an item named Caesar Salad which has price $8.5
     When  Julius Caesar makes an order Caesar Salad with Balsamic Vinaigrette which has price $8.5
-    Then  We should have only one item named Caesar Salad with Balsamic Vinaigrette which has price $8.5
+    Then  We should have only one item named Caesar Salad which has price $8.5
     And   Caesar Salad with Balsamic Vinaigrette which has price $8.5 under Julius Caesar should be in the order list
 
   Scenario: Customer Sees His Order

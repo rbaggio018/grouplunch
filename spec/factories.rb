@@ -3,11 +3,11 @@ FactoryGirl.define do
   factory :order do
     item { FactoryGirl.create :item }
     customer { FactoryGirl.create :user }
+    sequence(:specs) { |n| "Specs #{n}" }
   end
 
   factory :item do
     sequence(:name) { |n| "Item #{n}" }
-    sequence(:specs) { |n| "Specs #{n}" }
     price 6.95
   end
 

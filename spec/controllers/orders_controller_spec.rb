@@ -53,7 +53,8 @@ describe OrdersController do
   describe 'POST#create' do
     let(:order_params) {
       {
-        item: { name: "Item", price: 6.95, specs: "Specs" }
+        item: { name: "Item", price: 6.95 },
+        specs: "Specs"
       }
     }
 
@@ -77,6 +78,10 @@ describe OrdersController do
       it 'associates order with current user' do
         expect(Order.last.customer).to eq(current_user)
       end
+
+      it 'saves the specs' do
+        expect(Order.last.specs).to eq("Specs")
+      end
     end
 
     context 'new item' do
@@ -94,7 +99,7 @@ describe OrdersController do
     end
 
     context 'existing item' do
-      let!(:existing_item) { FactoryGirl.create(:item, name: "Item", price: 6.95, specs: "Specs") }
+      let!(:existing_item) { FactoryGirl.create(:item, name: "Item", price: 6.95) }
 
       it 'does not create item' do
         expect{
@@ -108,23 +113,8 @@ describe OrdersController do
       end
     end
 
-    context 'new item with same name and same specs but different price' do
-      let!(:item) { FactoryGirl.create(:item, name: "Item", price: 7.25, specs: "Specs") }
-
-      it 'creates a new item' do
-        expect{
-          post :create, order: order_params
-        }.to change(Item, :count).by(1)
-      end
-
-      it 'associates order with new item' do
-        post :create, order: order_params
-        expect(Order.last.item).to eq(Item.last)
-      end
-    end
-
-    context 'new item with same name and same price but different specs' do
-      let!(:item) { FactoryGirl.create(:item, name: "Item", price: 6.95, specs: "Different Specs") }
+    context 'new item with same name but different price' do
+      let!(:item) { FactoryGirl.create(:item, name: "Item", price: 7.25) }
 
       it 'creates a new item' do
         expect{
@@ -241,7 +231,8 @@ describe OrdersController do
     let(:order) { FactoryGirl.create(:order, customer: current_user) }
     let(:order_params) {
       {
-        item: { name: "Item", price: 6.95, specs: "Specs" }
+        item: { name: "Item", price: 6.95 },
+        specs: "Specs"
       }
     }
 
@@ -249,7 +240,8 @@ describe OrdersController do
       before { put :update, id: order.id, order: order_params }
 
       it 'updates the order' do
-        expect(order.reload.item.specs).to eq("Specs")
+        expect(order.reload.item.name).to eq("Item")
+        expect(order.reload.specs).to eq("Specs")
       end
 
       it 'assigns @order' do
@@ -272,7 +264,8 @@ describe OrdersController do
       end
 
       it 'does not update the order' do
-        expect(order.reload.item.specs).not_to eq("Specs")
+        expect(order.reload.item.name).not_to eq("Item")
+        expect(order.reload.specs).not_to eq("Specs")
       end
 
       it 'redirects to group order page' do
@@ -291,7 +284,8 @@ describe OrdersController do
       end
 
       it 'does not update the order' do
-        expect(order.reload.item.specs).not_to eq("Specs")
+        expect(order.reload.item.name).not_to eq("Item")
+        expect(order.reload.specs).not_to eq("Specs")
       end
 
       it 'assigns @order' do
@@ -310,6 +304,11 @@ describe OrdersController do
     context 'order of someone else' do
       let(:order_of_aother_customer) { FactoryGirl.create(:order) }
       before { put :update, id: order_of_aother_customer.id, order: order_params }
+
+      it 'does not update the order' do
+        expect(order.reload.item.name).not_to eq("Item")
+        expect(order.reload.specs).not_to eq("Specs")
+      end
 
       it 'redirects to home page' do
         expect(response).to redirect_to(root_url)
@@ -364,6 +363,10 @@ describe OrdersController do
     context 'order of someone else' do
       let(:order_of_aother_customer) { FactoryGirl.create(:order) }
       before { delete :destroy, id: order_of_aother_customer.id }
+
+      it 'does not delete the order' do
+        expect(Order.find(order.id)).not_to be_nil
+      end
 
       it 'redirects to home page' do
         expect(response).to redirect_to(root_url)
