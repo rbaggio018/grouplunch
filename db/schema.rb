@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140101205523) do
+ActiveRecord::Schema.define(version: 20140101221233) do
 
   create_table "group_orders", force: true do |t|
     t.integer  "customer_id"
@@ -27,6 +27,8 @@ ActiveRecord::Schema.define(version: 20140101205523) do
     t.datetime "updated_at"
   end
 
+  add_index "items", ["name", "price"], name: "index_items_on_name_and_price", using: :btree
+
   create_table "orders", force: true do |t|
     t.integer  "item_id"
     t.integer  "customer_id"
@@ -35,6 +37,9 @@ ActiveRecord::Schema.define(version: 20140101205523) do
     t.integer  "group_order_id"
     t.string   "specs"
   end
+
+  add_index "orders", ["customer_id"], name: "index_orders_on_customer_id", using: :btree
+  add_index "orders", ["item_id"], name: "index_orders_on_item_id", using: :btree
 
   create_table "transactions", force: true do |t|
     t.integer  "source_id"
