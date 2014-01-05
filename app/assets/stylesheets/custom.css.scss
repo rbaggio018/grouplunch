@@ -136,6 +136,7 @@ hr {
 
 hr.secondary {
   width: 30%;
+  margin: 3em auto 2em auto;
 }
 
 table {
@@ -144,7 +145,7 @@ table {
 }
 
 td {
-  color: white;
+  color: #BBBBBB;
   padding-left: 1em;
   padding-right: 1em;
 }
@@ -278,4 +279,11 @@ input#transaction_amount {
 
 p.lower {
   margin-top: 5em;
+}
+
+p.group-link {
+  a {
+    color: #AAAAAA;
+    text-decoration: none;
+  }
 }

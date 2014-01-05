@@ -4,5 +4,6 @@
   = button_to 'Changed my mind', edit_order_path(@order), :method => :get, class: "grey-btn edit-order-btn"
   = button_to 'Stay hungry', @order, :method => :delete, class: "grey-btn"
 
-%p.lower
-  = render 'shared/current_balance_link'
+%p.lower= render 'shared/current_balance_link'
+%hr.secondary
+%p.group-link= link_to "group", orders_path
