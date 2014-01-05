@@ -68,7 +68,7 @@ describe OrdersController do
       before { post :create, order: order_params }
 
       it 'redirects to home page' do
-        expect(response).to redirect_to root_url
+        expect(response).to redirect_to(root_url)
       end
 
       it 'shows notice' do
@@ -140,6 +140,26 @@ describe OrdersController do
       it 'renders new template' do
         post :create, order: order_params
         expect(response).to render_template(:new)
+      end
+
+      it 'shows error message' do
+        post :create, order: order_params
+        expect(flash[:error]).not_to be_nil
+      end
+    end
+
+    context 'already ordered' do
+      before { FactoryGirl.create(:order, customer:current_user) }
+
+      it 'does not create a new order' do
+        expect{
+          post :create, order: order_params
+        }.to change(Order, :count).by(0)
+      end
+
+      it 'renders show template' do
+        post :create, order: order_params
+        expect(response).to render_template(:show)
       end
 
       it 'shows error message' do
@@ -248,8 +268,8 @@ describe OrdersController do
         expect(assigns(:order)).to eq(order)
       end
 
-      it 'renders show template' do
-        expect(response).to render_template(:show)
+      it 'redirects to home page' do
+        expect(response).to redirect_to(root_url)
       end
 
       it 'shows notice' do

@@ -55,12 +55,6 @@ describe GroupOrder do
 
       it { should be_valid }
     end
-
-    context 'customer is not valid' do
-      before { group_order.customer.name = "" }
-
-      it { should_not be_valid }
-    end
   end
 
   describe '#sum' do

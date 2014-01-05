@@ -10,7 +10,7 @@ class OrdersController < ApplicationController
   end
 
   def new
-    if @order = Order.where(customer: current_user, group_order_id: nil).first
+    if @order = current_user.order_in_queue
       render :show
     else
       @order = Order.new(item: Item.new)
@@ -19,6 +19,11 @@ class OrdersController < ApplicationController
   end
 
   def create
+    if @order = current_user.order_in_queue
+      flash[:error] = "You've already ordered. Please wait for group order."
+      render :show and return
+    end
+
     @order = Order.new(order_params.merge(customer: current_user, item: @item))
 
     if @order.save
@@ -37,7 +42,7 @@ class OrdersController < ApplicationController
     @order.item = @item
     if @order.update_attributes(order_params)
       flash[:notice] = "Successfully updated"
-      render :show
+      redirect_to root_url
     else
       flash[:error] = readable_error_message
       render :edit
@@ -82,6 +87,7 @@ class OrdersController < ApplicationController
     end
 
     def readable_error_message
-      @order.errors.full_messages.to_sentence
+      errors = @order.item.errors || @order.errors
+      errors.full_messages.to_sentence
     end
 end

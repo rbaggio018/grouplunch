@@ -1,0 +1,14 @@
+= form_for @group_order do |f|
+
+  = f.label :total
+  = f.text_field :total, placeholder: "total payed"
+
+  - @group_order.orders.each do |order|
+    = f.hidden_field :order_ids, value: order.id, multiple: true
+
+  = f.submit "Place"
+
+%hr.secondary
+
+%table
+  = render @orders

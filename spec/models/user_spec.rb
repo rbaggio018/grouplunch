@@ -102,4 +102,29 @@ describe User do
       end
     end
   end
+
+  describe '#order_in_queue' do
+
+    context 'just ordered' do
+      let!(:order) { FactoryGirl.create(:order, customer: user) }
+
+      it 'returns last order' do
+        expect(user.order_in_queue).to eq(order)
+      end
+
+      context 'group order already placed' do
+        before { FactoryGirl.create(:group_order, orders: [order]) }
+
+        it 'returns nil' do
+          expect(user.order_in_queue).to be_nil
+        end
+      end
+    end
+
+    context 'no order yet' do
+      it 'returns nil' do
+        expect(user.order_in_queue).to be_nil
+      end
+    end
+  end
 end

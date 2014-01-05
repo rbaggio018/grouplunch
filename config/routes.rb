@@ -19,7 +19,7 @@ Grouplunch::Application.routes.draw do
 
   resources :orders, :only => [:index, :create, :edit, :update, :destroy]
   resources :group_orders, :only => [:index, :create, :show]
-  resources :users, :only => [:index, :show]
+  resources :users, :only => [:index]
   resources :transactions, :only => [:new, :create]
 
   # Example resource route with options:

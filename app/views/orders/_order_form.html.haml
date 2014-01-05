@@ -1,0 +1,13 @@
+= form_for @order do |f|
+
+  = f.fields_for :item, @order.item do |item|
+    = item.label :name, "Order"
+    = item.text_field :name, readonly: readonly, placeholder: "Pad Thai"
+
+    = item.label :price, "Price"
+    = item.text_field :price, readonly:readonly, placeholder: "8.95"
+
+  = f.label :specs
+  = f.text_field :specs, readonly: readonly, placeholder: "mild"
+
+  = f.submit "Place" if !readonly

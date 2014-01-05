@@ -5,5 +5,5 @@ class Order < ActiveRecord::Base
   belongs_to :group_order
 
   validates :item, :customer, presence: true
-  validates_associated :item, :customer
+  validates_associated :item
 end

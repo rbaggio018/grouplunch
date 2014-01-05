@@ -1,0 +1,8 @@
+.current-user-balance
+  %p Your current balance is
+  %p= balance_span(current_user.balance)
+
+%hr.secondary
+
+%table
+  = render @users
