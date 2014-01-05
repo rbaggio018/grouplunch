@@ -54,7 +54,7 @@ label {
   display: none;
 }
 
-input[type=text] {
+input[type=text], input[type=email] {
   text-indent: 1em;
   min-width: 130px;
   display: inline;
@@ -63,7 +63,6 @@ input[type=text] {
   -webkit-box-shadow: $inside-shadow-grey 0px 0px 5px;
   -moz-box-shadow: $inside-shadow-grey 0px 0px 5px;
   box-shadow: $inside-shadow-grey 0px 0px 5px;
-  width: 11em;
   height: 2.3125em;
   padding: 0px;
   margin: 0px auto;
@@ -71,6 +70,14 @@ input[type=text] {
   font-weight: normal;
   margin-left: 0.5em;
   margin-right: 0.5em;
+}
+
+input[type=text] {
+  width: 11em;
+}
+
+input[type=email] {
+  width: 18em;
 }
 
 input[type=submit] {
@@ -255,4 +262,9 @@ div.current-user-balance {
     font-size: 1.5em;
     line-height: 1.5em;
   }
+}
+
+input#transaction_amount {
+  width: 6em;
+  min-width: 20px;
 }
