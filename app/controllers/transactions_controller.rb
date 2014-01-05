@@ -13,7 +13,7 @@ class TransactionsController < ApplicationController
       flash[:notice] = "Successfully trasferred"
       redirect_to users_path
     else
-      flash[:error] = @transaction.errors.full_messages.to_sentence
+      flash.now[:error] = @transaction.errors.full_messages.to_sentence
       render :new
     end
   end

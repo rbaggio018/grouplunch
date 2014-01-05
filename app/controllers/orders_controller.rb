@@ -20,7 +20,7 @@ class OrdersController < ApplicationController
 
   def create
     if @order = current_user.order_in_queue
-      flash[:error] = "You've already ordered. Please wait for group order."
+      flash.now[:error] = "You've already ordered. Please wait for group order."
       render :show and return
     end
 
@@ -30,7 +30,7 @@ class OrdersController < ApplicationController
       flash[:notice] = "Successfully ordered"
       redirect_to root_url
     else
-      flash[:error] = readable_error_message
+      flash.now[:error] = readable_error_message
       render :new
     end
   end
@@ -44,7 +44,7 @@ class OrdersController < ApplicationController
       flash[:notice] = "Successfully updated"
       redirect_to root_url
     else
-      flash[:error] = readable_error_message
+      flash.now[:error] = readable_error_message
       render :edit
     end
   end

@@ -11,7 +11,7 @@ class GroupOrdersController < ApplicationController
       flash[:notice] = "Successfully ordered"
       redirect_to users_path
     else
-      flash[:error] = @group_order.errors.full_messages.to_sentence
+      flash.now[:error] = @group_order.errors.full_messages.to_sentence
       @orders = @group_order.orders
       render "orders/index"
     end
