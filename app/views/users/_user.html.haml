@@ -1,4 +1,4 @@
 %tr
   %td= user.name
-  %td= user.email
+  %td= link_to user.email, new_transaction_path(source_email: user.email)
   %td= balance_span(user.balance)

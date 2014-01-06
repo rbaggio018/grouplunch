@@ -10,6 +10,15 @@ describe TransactionsController do
       get :new
       expect(assigns(:transaction)).not_to be_nil
     end
+
+    context 'params[:source_email] exists' do
+      let(:source) { FactoryGirl.create(:user) }
+
+      it 'loads @transaction.source' do
+        get :new, source_email: source.email
+        expect(assigns(:transaction).source).to eq(source)
+      end
+    end
   end
 
   describe 'POST#create' do

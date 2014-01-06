@@ -2,6 +2,9 @@ class TransactionsController < ApplicationController
 
   def new
     @transaction = Transaction.new
+    if params[:source_email] and source = User.where(email: params[:source_email]).first
+      @transaction.source = source
+    end
   end
 
   def create
